@@ -40,6 +40,16 @@ export default function Home() {
     setLogs(storedLogs);
   }, []);
 
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage(null);
+      }, 3000);
+
+      return () => clearTimeout(timer); // Clear the timeout if message changes or component unmounts
+    }
+  }, [message]);
+
   const saveEmployeesToLocalStorage = (employees: Employee[]) => {
     localStorage.setItem("employees", JSON.stringify(employees));
   };
@@ -217,7 +227,11 @@ export default function Home() {
         <div className="w-full max-w-md">
           <select
             className="border border-gray-300 rounded p-2 w-full text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onChange={(e) => setSelectedEmployee(Number(e.target.value))}
+            onChange={(e) =>
+              setSelectedEmployee(
+                e.target.value ? Number(e.target.value) : null
+              )
+            }
             value={selectedEmployee || ""}
           >
             <option value="">Select Employee</option>
@@ -233,17 +247,17 @@ export default function Home() {
       <div className="flex justify-center space-x-4 mb-8">
         <button
           onClick={handleLogin}
-          disabled={isEmployeeLoggedIn}
+          disabled={isEmployeeLoggedIn || selectedEmployee === null}
           className="bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 w-full disabled:bg-gray-400"
         >
-          Log In
+          Check In
         </button>
         <button
           onClick={handleLogout}
           disabled={!isEmployeeLoggedIn}
           className="bg-red-500 text-white px-4 py-2 rounded shadow hover:bg-red-600 w-full disabled:bg-gray-400"
         >
-          Log Out
+          Check Out
         </button>
         <button
           onClick={exportToCSV}
