@@ -4,7 +4,6 @@ import type { NextConfig } from "next";
 // Base Next.js configuration
 const baseConfig: NextConfig = {
   reactStrictMode: true, // Next.js-specific option
-  swcMinify: true, // Enable SWC minification
 };
 
 // Wrap withPWA to add PWA functionality
